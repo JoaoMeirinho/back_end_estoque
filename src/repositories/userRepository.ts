@@ -6,7 +6,7 @@ import bcrypt from 'bcrypt';
 import { sign } from 'jsonwebtoken';
 dotenv.config();
 
-const salt = process.env.BCRYPT_SALT as string;
+const salt = Number(process.env.BCRYPT_SALT);
 
 export const criarUsuario = async (user: IUser): Promise<IResponseBody> => {
         try{
@@ -17,16 +17,14 @@ export const criarUsuario = async (user: IUser): Promise<IResponseBody> => {
             })
 
             
-            
             if( findUser ) {
                 return {
                     error: true,
                     message: 'Usuário Já cadastrado',
                 }
             }
-            
-            user.password = bcrypt.hashSync(user.password, salt!)
-            console.log('chegou aqui')
+            const hash = await bcrypt.hash(user.password, salt)
+            user.password = hash;
             await prisma.user.create({
                 data: user
             })
@@ -37,7 +35,7 @@ export const criarUsuario = async (user: IUser): Promise<IResponseBody> => {
             }
             
         }catch(e){
-            throw new Error("Não foi possível cadastrar o usuário");
+            throw new Error(e as string);
         }
     }
 
@@ -49,12 +47,7 @@ export const criarJWT = async (email: string, password: string): Promise<IRespon
             },
         })
 
-        if(!findUser || !bcrypt.compareSync(bcrypt.hashSync(password, salt!), findUser.password)) {
-            console.log(salt)
-            console.log(password)
-            console.log(bcrypt.hashSync(password, salt))
-            console.log(findUser?.password)
-            console.log(bcrypt.compareSync(bcrypt.hashSync(password, salt!), findUser!.password))
+        if(!findUser || !bcrypt.compareSync(password, findUser.password)) {
             return {
                 error: true,
                 message: "Email ou senha incorretos"
