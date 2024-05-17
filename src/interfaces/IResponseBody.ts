@@ -1,5 +1,5 @@
 export interface IResponseBody{
     error: boolean,
-    message?: string,
+    message: string,
     data?: any,
 }
