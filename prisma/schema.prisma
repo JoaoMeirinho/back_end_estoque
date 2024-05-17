@@ -25,6 +25,6 @@ model Product{
   name String
   description String
   image String
-  value Decimal @db.Decimal(10,9)
+  value Decimal @db.Decimal(10,2)
   quantity Int
 }

@@ -6,3 +6,5 @@ interface IProduct{
     value: number,
     quantity: number
 }
+
+export default IProduct
