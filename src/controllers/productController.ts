@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import IProduct from "../models/productModel";
-import { criarProduto, alterarProduto } from "../repositories/productRepository";
+import { criarProduto, alterarProduto, obterProduto } from "../repositories/productRepository";
 
 export const cadastrarProduto = async (req: Request, res: Response) => {
     try{
@@ -24,6 +24,18 @@ export const atualizarProduto = async (req: Request, res: Response) => {
         res.status(400).json({
             error: true,
             message: "erro ao alterar produto",
+        })
+    }
+}
+
+export const lerProduto = async (req: Request, res: Response) => {
+    try{
+        const id = Number(req.params.id);
+        res.json(await obterProduto(id)); 
+    }catch(e){
+        res.status(400).json({
+            error: true,
+            message: e,
         })
     }
 }

@@ -58,3 +58,28 @@ export const alterarProduto = async (id: number, product: IProduct): Promise<IRe
         throw new Error(e as string)
     }
 }
+
+export const obterProduto = async (id: number): Promise<IResponseBody> => {
+    try{
+        const findProduct = await prisma.product.findUnique({
+            where:{
+                id:id
+            }
+        })
+
+        if(!findProduct){
+            return {
+                error: true,
+                message: "Produto não encontrado"
+            }
+        }
+
+        return {
+            error: false,
+            message: "Produto localizado!",
+            data: findProduct,
+        }
+    }catch(e){
+        throw new Error(e as string);
+    }
+}
