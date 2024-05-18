@@ -20,3 +20,41 @@ export const criarProduto= async (product: IProduct): Promise<IResponseBody> => 
             throw new Error(e as string);
         }
     }
+
+export const alterarProduto = async (id: number, product: IProduct): Promise<IResponseBody> => {
+    try{
+
+        const findProduct = prisma.product.findUnique({
+            where: {
+                id: id
+            }
+        })
+        
+        if(!findProduct){
+            return {
+                error: true,
+                message: 'Produto não encontrado!'
+            }
+        }
+        
+        await prisma.product.update({
+            where: {
+                id: id
+            },
+            data: {
+                name: product.name,
+                description: product.description,
+                image: product.image,
+                value: product.value,
+                quantity: product.quantity
+            }
+        })
+
+        return {
+            error: false,
+            message: "Produto atualizado com sucesso!"
+        }
+    }catch(e){
+        throw new Error(e as string)
+    }
+}

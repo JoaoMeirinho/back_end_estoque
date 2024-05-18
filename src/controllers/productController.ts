@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import IProduct from "../models/productModel";
-import { criarProduto } from "../repositories/productRepository";
+import { criarProduto, alterarProduto } from "../repositories/productRepository";
 
 export const cadastrarProduto = async (req: Request, res: Response) => {
     try{
@@ -15,14 +15,15 @@ export const cadastrarProduto = async (req: Request, res: Response) => {
     }
 }
 
-// export const atualizarProduto = async (req: Request, res: Response) => {
-//     try{
-//         const {email, password} = req.body;
-//         res.json(await criarJWT(email, password)); 
-//     }catch(e){
-//         res.status(400).json({
-//             error: true,
-//             message: "erro ao fazer login",
-//         })
-//     }
-// }
+export const atualizarProduto = async (req: Request, res: Response) => {
+    try{
+        const id = Number(req.params.id);
+        const product: IProduct = req.body;
+        res.json(await alterarProduto(id, product)); 
+    }catch(e){
+        res.status(400).json({
+            error: true,
+            message: "erro ao alterar produto",
+        })
+    }
+}
