@@ -4,7 +4,7 @@ import { prisma } from "../services/prisma-client";
 import { error } from "console";
 
 interface CustomRequest extends Request{
-    token: string | JwtPayload;
+    user: string | JwtPayload;
 }
 export const auth = async (req: Request, res: Response, next: NextFunction) => {
     try{
@@ -15,7 +15,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
 
         const decoded = jwt.verify(token, process.env.SECRET as string);
         
-        (req as CustomRequest).token = decoded; 
+        (req as CustomRequest).user = decoded; 
 
         next()
 
