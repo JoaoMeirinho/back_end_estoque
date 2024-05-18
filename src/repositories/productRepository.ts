@@ -24,7 +24,7 @@ export const criarProduto= async (product: IProduct): Promise<IResponseBody> => 
 export const alterarProduto = async (id: number, product: IProduct): Promise<IResponseBody> => {
     try{
 
-        const findProduct = prisma.product.findUnique({
+        const findProduct = await prisma.product.findUnique({
             where: {
                 id: id
             }
@@ -81,5 +81,58 @@ export const obterProduto = async (id: number): Promise<IResponseBody> => {
         }
     }catch(e){
         throw new Error(e as string);
+    }
+}
+
+export const obterTodosOsProdutos = async (): Promise<IResponseBody> => {
+    try{
+        const products = await prisma.product.findMany()
+
+        if(products.length == 0){
+            return {
+                error: false,
+                message: "Não há produtos listados"
+            }
+        }
+
+        return {
+            error: false,
+            message: "Produtos localizados!",
+            data: products,
+        }
+    }catch(e){
+        throw new Error(e as string);
+    }
+}
+
+export const excluirProduto = async (id: number): Promise<IResponseBody> => {
+    try{
+
+        const findProduct = await prisma.product.findUnique({
+            where: {
+                id: id
+            }
+        })
+        
+
+        if(!findProduct){
+            return {
+                error: true,
+                message: 'Produto não encontrado!'
+            }
+        }
+        
+        await prisma.product.delete({
+            where: {
+                id: id
+            },
+        })
+
+        return {
+            error: false,
+            message: "Produto deletado com sucesso!"
+        }
+    }catch(e){
+        throw new Error(e as string)
     }
 }
