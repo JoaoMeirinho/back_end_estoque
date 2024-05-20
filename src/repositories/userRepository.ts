@@ -55,10 +55,8 @@ export const criarJWT = async (email: string, password: string): Promise<IRespon
         }
         
         const token = sign({
-            id: findUser.id,
             email: findUser.email,
             name: findUser.name,
-            password: findUser.password,
         }, process.env.SECRET!, {
             expiresIn: "1d",
         })
