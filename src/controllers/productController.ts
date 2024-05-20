@@ -5,6 +5,8 @@ import { criarProduto, alterarProduto, obterProduto, obterTodosOsProdutos, exclu
 export const cadastrarProduto = async (req: Request, res: Response) => {
     try{
         const product: IProduct = req.body;
+        console.log(product)
+        product.image = req.file?.filename as string;
         res.json(await criarProduto(product));        
     } catch(e){
         console.log(e);
@@ -19,6 +21,7 @@ export const atualizarProduto = async (req: Request, res: Response) => {
     try{
         const id = Number(req.params.id);
         const product: IProduct = req.body;
+        product.image = req.file?.filename as string;
         res.json(await alterarProduto(id, product)); 
     }catch(e){
         res.status(400).json({

@@ -1,5 +1,7 @@
 import cors from "cors";
 import express, { Request, Response, NextFunction } from "express";
+import multer from 'multer';
+import storage from "./middlewares/multer";
 import helmet from "helmet";
 import userRoutes from "./routers/userRoutes";
 import productRoutes from "./routers/productRoutes";
@@ -9,6 +11,7 @@ const app = express();
 app.use(cors());
 app.use(helmet());
 app.use(express.json())
+app.use('/uploads', express.static("uploads"));
 
 // app.use((req: Request, res: Response, next: NextFunction) => {
 //     res.send('Hello World');

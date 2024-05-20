@@ -7,8 +7,16 @@ dotenv.config();
 
 export const criarProduto= async (product: IProduct): Promise<IResponseBody> => {
         try{
+            
+
             await prisma.product.create({
-                data: product
+                data: {
+                    name: product.name,
+                    description: product.description,
+                    image: product.image,
+                    value: Number(product.value),
+                    quantity: Number(product.quantity),
+                }
             })
 
             return {
@@ -45,8 +53,8 @@ export const alterarProduto = async (id: number, product: IProduct): Promise<IRe
                 name: product.name,
                 description: product.description,
                 image: product.image,
-                value: product.value,
-                quantity: product.quantity
+                value: Number(product.value),
+                quantity: Number(product.quantity)
             }
         })
 
